@@ -59,7 +59,6 @@ def delete_order():
     global order_id
     order_id -= 1
     tree.delete(order_id)
-    return order_id
 
 
 boton_guardar = Button(root, text="Guardar", command=add_order)

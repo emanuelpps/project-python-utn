@@ -1,9 +1,20 @@
 from tkinter import *
+from tkinter import ttk
+
+
+order_id = 0
 
 root = Tk()
 
+var_nombre_cliente = StringVar()
+var_telefono_cliente = StringVar()
+var_direccion_cliente = StringVar()
+var_monto_cliente = StringVar()
+var_pedido_cliente = StringVar()
+var_fecha_cliente = StringVar()
+
 nombre_cliente = Label(root, text="Nombre de Cliente: ")
-nombre_cliente.grid(row=0, column=0)
+nombre_cliente.grid(row=0, column=0, sticky=W)
 telefono_cliente = Label(root, text="Telefono: ")
 telefono_cliente.grid(row=0, column=1, sticky=W)
 
@@ -17,20 +28,24 @@ pedido_cliente.grid(row=4, column=0, sticky=W)
 fecha_cliente = Label(root, text="Fecha: ")
 fecha_cliente.grid(row=4, column=1, sticky=W)
 
-nombre_cliente = Entry(root)
+nombre_cliente = Entry(root, textvariable=var_nombre_cliente, width=100)
 nombre_cliente.grid(row=1, column=0)
-telefono_cliente = Entry(root)
+telefono_cliente = Entry(root, textvariable=var_telefono_cliente, width=100)
 telefono_cliente.grid(row=1, column=1, sticky=W)
 
-direccion_cliente = Entry(root)
+direccion_cliente = Entry(root, textvariable=var_direccion_cliente, width=100)
 direccion_cliente.grid(row=3, column=0, sticky=W)
-monto_cliente = Entry(root)
+monto_cliente = Entry(root, textvariable=var_monto_cliente, width=100)
 monto_cliente.grid(row=3, column=1, sticky=W)
 
-pedido_cliente = Entry(root)
+pedido_cliente = Entry(root, textvariable=var_pedido_cliente, width=100)
 pedido_cliente.grid(row=5, column=0, sticky=W)
-fecha_cliente = Entry(root)
+fecha_cliente = Entry(root, textvariable=var_fecha_cliente, width=100)
 fecha_cliente.grid(row=5, column=1, sticky=W)
+
+
+boton_guardar = Button(root, text="Guardar")
+boton_guardar.grid(row=6, column=1, sticky=E)
 
 
 root.mainloop()

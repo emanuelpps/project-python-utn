@@ -4,6 +4,9 @@ from tkinter import ttk
 
 order_id = 0
 
+orders = []
+
+
 root = Tk()
 
 var_nombre_cliente = StringVar()
@@ -44,29 +47,45 @@ fecha_cliente = Entry(root, textvariable=var_fecha_cliente, width=100)
 fecha_cliente.grid(row=5, column=1, sticky=W)
 
 
-boton_guardar = Button(root, text="Guardar")
+def add_order():
+    global order_id
+    order_id += 1
+    tree.insert("", 0, values=(order_id, var_nombre_cliente.get(), var_telefono_cliente.get(
+    ), var_direccion_cliente.get(), var_monto_cliente.get(), var_pedido_cliente.get(), var_fecha_cliente.get()))
+    return order_id
+
+
+def delete_order():
+    global order_id
+    order_id -= 1
+    tree.delete(order_id)
+    return order_id
+
+
+boton_guardar = Button(root, text="Guardar", command=add_order)
 boton_guardar.grid(row=6, column=1, sticky=E)
+boton_eliminar = Button(root, text="Eliminar", command=delete_order)
+boton_eliminar.grid(row=6, column=1, sticky=W)
 
 
 tree = ttk.Treeview(root)
 tree.grid(row=7, column=0, columnspan=2)
 
-tree["columns"] = ("#1", "#2", "#3", "#4", "#5", "#6", "#7")
-tree.column("#0", width=0)
+tree["columns"] = ("#1", "#2", "#3", "#4", "#5", "#6")
+tree.column("#0", width=0, stretch=NO)
 tree.column("#1", width=80)
 tree.column("#2", width=80)
 tree.column("#3", width=80)
 tree.column("#4", width=80)
 tree.column("#5", width=80)
 tree.column("#6", width=80)
-tree.column("#7", width=80)
 
-tree.heading("#0", text="", anchor=W)
 tree.heading("#1", text="ID", anchor=W)
 tree.heading("#2", text="Nombre", anchor=W)
 tree.heading("#3", text="Telefono", anchor=W)
 tree.heading("#4", text="Direccion", anchor=W)
 tree.heading("#5", text="Monto", anchor=W)
 tree.heading("#6", text="Pedido", anchor=W)
-tree.heading("#7", text="Fecha", anchor=W)
+
+tree.grid(row=8, column=0, columnspan=2)
 root.mainloop()

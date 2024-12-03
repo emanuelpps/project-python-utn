@@ -58,7 +58,7 @@ def add_order():
 def delete_order():
     global order_id
     item = tree.focus()
-    tree.delete(order_id)
+    tree.delete(item)
     order_id -= 1
 
 

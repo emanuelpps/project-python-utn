@@ -47,6 +47,11 @@ def update_order(connection, order_id, var_nombre_cliente, var_telefono_cliente,
     cursor.execute(sql, order_data)
     connection.commit()
 
+def select_order(connection, order_id):
+    cursor = connection.cursor()
+    sql = "SELECT * FROM orders WHERE id = ?"
+    cursor.execute(sql, (order_id,))
+    return cursor.fetchone()
 
 create_db()
 orders_table(connection=create_db())

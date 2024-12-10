@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import ttk
+import sqlite3
 
 
 order_id = 0
@@ -9,6 +10,18 @@ orders = []
 
 root = Tk()
 
+def create_db():
+    connection = sqlite3.connect("orders.db")
+    return connection
+
+def orders_table(connection):
+    cursor = connection.cursor()
+    sql = "CREATE TABLE orders (id INTEGER PRIMARY KEY, nombre TEXT, telefono TEXT, direccion TEXT, total TEXT, pedido TEXT, fecha TEXT)"
+    cursor.execute(sql)
+    connection.commit()
+    
+create_db()
+orders_table(connection=create_db())
 var_nombre_cliente = StringVar()
 var_telefono_cliente = StringVar()
 var_direccion_cliente = StringVar()

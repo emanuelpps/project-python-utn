@@ -10,16 +10,44 @@ orders = []
 
 root = Tk()
 
+
 def create_db():
     connection = sqlite3.connect("orders.db")
     return connection
+
 
 def orders_table(connection):
     cursor = connection.cursor()
     sql = "CREATE TABLE orders (id INTEGER PRIMARY KEY, nombre TEXT, telefono TEXT, direccion TEXT, total TEXT, pedido TEXT, fecha TEXT)"
     cursor.execute(sql)
     connection.commit()
-    
+
+
+def insert_order(connection, order_id, var_nombre_cliente, var_telefono_cliente, var_direccion_cliente, var_monto_cliente, var_pedido_cliente, var_fecha_cliente):
+    cursor = connection.cursor()
+    order_data = (order_id, var_nombre_cliente, var_telefono_cliente,
+                  var_direccion_cliente, var_monto_cliente, var_pedido_cliente, var_fecha_cliente)
+    sql = "INSERT INTO orders (id, nombre, telefono, direccion, total, pedido, fecha) VALUES (?, ?, ?, ?, ?, ?, ?)"
+    cursor.execute(sql, order_data)
+    connection.commit()
+
+
+def delete_order(connection, order_id):
+    cursor = connection.cursor()
+    sql = "DELETE FROM orders WHERE id = ?"
+    cursor.execute(sql, (order_id,))
+    connection.commit()
+
+
+def update_order(connection, order_id, var_nombre_cliente, var_telefono_cliente, var_direccion_cliente, var_monto_cliente, var_pedido_cliente, var_fecha_cliente):
+    cursor = connection.cursor()
+    order_data = (var_nombre_cliente, var_telefono_cliente,
+                  var_direccion_cliente, var_monto_cliente, var_pedido_cliente, var_fecha_cliente, order_id)
+    sql = "UPDATE orders SET nombre = ?, telefono = ?, direccion = ?, total = ?, pedido = ?, fecha = ? WHERE id = ?"
+    cursor.execute(sql, order_data)
+    connection.commit()
+
+
 create_db()
 orders_table(connection=create_db())
 var_nombre_cliente = StringVar()

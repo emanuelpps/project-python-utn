@@ -48,28 +48,16 @@ var_fecha_cliente = StringVar()
 # VALIDACIONES
 
 
-def validar_nombre(nombre):
-    re.fullmatch(r'[a-zA-Z]+', nombre)
-    if not validar_nombre(nombre):
-        messagebox.showerror(
-            "Error", "Nombre inválido: solo letras y espacios.")
-        return
+def validate_name(nombre):
+    return re.fullmatch(r'[a-zA-Z]+', nombre)
 
 
-def validar_telefono(telefono):
-    re.fullmatch(r'\d{0,10}', telefono)
-    if not validar_telefono(telefono):
-        messagebox.showerror(
-            "Error", "Teléfono inválido: solo números hasta 10 dígitos.")
-        return
+def validate_phone(telefono):
+    return re.fullmatch(r'\d{0,10}', telefono)
 
 
-def validar_direccion(direccion):
-    re.fullmatch(r'[a-zA-Z]+', direccion)
-    if not validar_direccion(direccion):
-        messagebox.showerror(
-            "Error", "Dirección inválida: solo letras y espacios.")
-        return
+def validate_address(direccion):
+    return re.fullmatch(r'[a-zA-Z]+', direccion)
 
 
 # FORMULARIO
@@ -107,7 +95,7 @@ tree.heading("#4", text="Dirección")
 tree.heading("#5", text="Monto")
 tree.heading("#6", text="Pedido")
 tree.heading("#7", text="Fecha")
-tree.grid(row=6, column=0, columnspan=2)
+tree.grid(row=8, column=0, columnspan=2)
 
 # BOTONES Y SUS RESPECTIVAS FUNCIONES
 
@@ -121,6 +109,9 @@ def add_order():
         var_pedido_cliente.get(),
         var_fecha_cliente.get()
     )
+    validate_name(data[0])
+    validate_phone(data[1])
+    validate_address(data[2])
     cursor = connection.cursor()
     cursor.execute(
         "INSERT INTO orders (nombre, telefono, direccion, total, pedido, fecha) VALUES (?, ?, ?, ?, ?, ?)", data)
@@ -140,12 +131,47 @@ def delete_order():
                            (order_id_to_delete,))
             connection.commit()
             tree.delete(selected_item)
+        else:
+            messagebox.showwarning(
+                "No hay seleccionado ninguna orden para eliminar.")
 
 
-Button(root, text="Guardar", command=lambda: add_order).grid(
-    row=7, column=0, sticky=E)
-Button(root, text="Eliminar", command=lambda: delete_order).grid(
-    row=7, column=1, sticky=W)
+def update_order():
+    selected_items = tree.selection()
+    if selected_items:
+        for selected_item in selected_items:
+            item = tree.item(selected_item)
+            order_id = item['values'][0]
+            new_data = (
+                var_nombre_cliente.get(),
+                var_telefono_cliente.get(),
+                var_direccion_cliente.get(),
+                var_monto_cliente.get(),
+                var_pedido_cliente.get(),
+                var_fecha_cliente.get()
+            )
+            cursor = connection.cursor()
+            cursor.execute("""
+                UPDATE orders
+                SET nombre = ?, telefono = ?, direccion = ?, total = ?, pedido = ?, fecha = ?
+                WHERE id = ?
+            """, (*new_data, order_id))
+            connection.commit()
+            tree.item(selected_item, values=new_data)
+            messagebox.showinfo("Actualizado", "La orden fue actualizada correctamente")
+    else:
+        messagebox.showwarning(
+            "Atención", "No hay ninguna orden seleccionada para actualizar."
+        )
+
+
+Button(root, text="Guardar", command=add_order).grid(
+    row=6, column=1, sticky=E)
+Button(root, text="Eliminar", command=delete_order).grid(
+    row=6, column=1, sticky=W)
+Button(root, text="Actualizar", command=update_order).grid(
+    row=6, column=0, sticky=E
+)
 
 # LLENADO DE LA TABLA
 cursor = connection.cursor()

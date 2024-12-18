@@ -57,7 +57,7 @@ def validate_phone(telefono):
 
 
 def validate_address(direccion):
-    return re.fullmatch(r'[a-zA-Z]+', direccion)
+    return len(direccion.strip()) > 0
 
 
 # FORMULARIO
@@ -88,13 +88,13 @@ Entry(root, textvariable=var_fecha_cliente).grid(
 
 tree = ttk.Treeview(root, columns=("#1", "#2", "#3", "#4",
                     "#5", "#6", "#7"), show="headings")
-tree.heading("#1", text="ID")
-tree.heading("#2", text="Nombre")
-tree.heading("#3", text="Teléfono")
-tree.heading("#4", text="Dirección")
-tree.heading("#5", text="Monto")
-tree.heading("#6", text="Pedido")
-tree.heading("#7", text="Fecha")
+tree.heading("#1", text="ID", anchor=W)
+tree.heading("#2", text="Nombre", anchor=W)
+tree.heading("#3", text="Teléfono", anchor=W)
+tree.heading("#4", text="Dirección", anchor=W)
+tree.heading("#5", text="Monto", anchor=W)
+tree.heading("#6", text="Pedido", anchor=W)
+tree.heading("#7", text="Fecha", anchor=W)
 tree.grid(row=8, column=0, columnspan=2)
 
 # BOTONES Y SUS RESPECTIVAS FUNCIONES
@@ -109,9 +109,18 @@ def add_order():
         var_pedido_cliente.get(),
         var_fecha_cliente.get()
     )
-    validate_name(data[0])
-    validate_phone(data[1])
-    validate_address(data[2])
+
+    if not validate_name(data[0]):
+        messagebox.showerror("Error", "El nombre solo debe contener letras.")
+        return
+    if not validate_phone(data[1]):
+        messagebox.showerror(
+            "Error", "El teléfono debe contener hasta 10 dígitos.")
+        return
+    if not validate_address(data[2]):
+        messagebox.showerror("Error", "La dirección no es válida.")
+        return
+
     cursor = connection.cursor()
     cursor.execute(
         "INSERT INTO orders (nombre, telefono, direccion, total, pedido, fecha) VALUES (?, ?, ?, ?, ?, ?)", data)
@@ -131,9 +140,8 @@ def delete_order():
                            (order_id_to_delete,))
             connection.commit()
             tree.delete(selected_item)
-        else:
             messagebox.showwarning(
-                "No hay seleccionado ninguna orden para eliminar.")
+                "Atención", "La orden fue eliminada con exito")
 
 
 def update_order():
@@ -157,8 +165,9 @@ def update_order():
                 WHERE id = ?
             """, (*new_data, order_id))
             connection.commit()
-            tree.item(selected_item, values=new_data)
-            messagebox.showinfo("Actualizado", "La orden fue actualizada correctamente")
+            tree.item(selected_item, values=(order_id, *new_data))
+            messagebox.showinfo(
+                "Actualizado", "La orden fue actualizada correctamente")
     else:
         messagebox.showwarning(
             "Atención", "No hay ninguna orden seleccionada para actualizar."

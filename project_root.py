@@ -174,7 +174,6 @@ def add_order():
         var_pedido_cliente.get(),
         var_fecha_cliente.get()
     )
-
     if not validate_name(data[0]):
         messagebox.showerror("Error", "El nombre solo debe contener letras.")
         return
@@ -185,7 +184,6 @@ def add_order():
     if not validate_address(data[2]):
         messagebox.showerror("Error", "La dirección no es válida.")
         return
-
     cursor = connection.cursor()
     cursor.execute(
         "INSERT INTO orders (nombre, telefono, direccion, total, pedido, fecha) VALUES (?, ?, ?, ?, ?, ?)", data)

@@ -63,7 +63,7 @@ var_fecha_cliente = StringVar()
 
 
 def validate_name(nombre):
-    return re.fullmatch(r'[a-zA-Z]+', nombre)
+    return re.fullmatch(r'[\s a-zA-Z]+', nombre)
 
 
 def validate_phone(telefono):

@@ -165,7 +165,12 @@ style.configure("Treeview.Heading", background=tree_heading_bg_color,
 # BOTONES Y SUS RESPECTIVAS FUNCIONES
 
 
-def add_order():
+def add_order(var_nombre_cliente,
+        var_telefono_cliente,
+        var_direccion_cliente,
+        var_monto_cliente,
+        var_pedido_cliente,
+        var_fecha_cliente):
     data = (
         var_nombre_cliente.get(),
         var_telefono_cliente.get(),

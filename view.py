@@ -112,17 +112,15 @@ def main_view(root):
     style.map("Treeview", background=[("selected", title_bg_color)])
     style.configure("Treeview.Heading", background=tree_heading_bg_color,
                     foreground=tree_heading_bg_color)
-    
-    
+
     Button(root, text="Eliminar", bg=button_del_bg_color, fg=button_fg_color, command=lambda: (
         selected_items := tree.selection(), delete_order(selected_items))).grid(row=7, column=0, sticky=E)
     Button(root, text="Actualizar", bg=button_bg_color, fg=button_fg_color, command=lambda: (
         selected_items := tree.selection(), update_order(selected_items))).grid(row=7, column=1, sticky=W)
     Button(root, text="Guardar", bg=button_bg_color, fg=button_fg_color,
-        command=lambda: (add_order(tree, var_nombre_cliente,
-              var_telefono_cliente.get(),
-              var_direccion_cliente.get(),
-              var_monto_cliente.get(),
-              var_pedido_cliente.get(),
-              var_fecha_cliente.get()))).grid(row=7, column=1, sticky=E)
-
+           command=lambda: add_order(var_nombre_cliente.get(),
+                                     var_telefono_cliente.get(),
+                                     var_direccion_cliente.get(),
+                                     var_monto_cliente.get(),
+                                     var_pedido_cliente.get(),
+                                     var_fecha_cliente.get())).grid(row=7, column=1, sticky=E)

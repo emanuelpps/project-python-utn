@@ -47,20 +47,16 @@ def validate_address(direccion):
     return len(direccion.strip()) > 0
 
 
-def add_order(tree,var_nombre_cliente,
-              var_telefono_cliente,
-              var_direccion_cliente,
-              var_monto_cliente,
-              var_pedido_cliente,
-              var_fecha_cliente):
+def add_order(nombre, telefono, direccion, total, pedido, fecha):
     data = (
-        var_nombre_cliente,
-        var_telefono_cliente,
-        var_direccion_cliente,
-        var_monto_cliente,
-        var_pedido_cliente,
-        var_fecha_cliente
+        nombre,
+        telefono,
+        direccion,
+        total,
+        pedido,
+        fecha
     )
+    print(nombre, telefono, direccion, total, pedido, fecha)
     if not validate_name(data[0]):
         messagebox.showerror("Error", "El nombre solo debe contener letras.")
         return

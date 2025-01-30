@@ -1,8 +1,7 @@
-from tkinter import ttk
-from tkinter import messagebox
 import sqlite3
 import re
-tree = ttk.Treeview()
+from tkinter import messagebox
+# CONEXIÓN A LA DB
 
 
 def create_db():
@@ -32,31 +31,23 @@ connection = create_db()
 orders_table(connection)
 
 
-# VALIDACIONES
+# BOTONES Y SUS RESPECTIVAS FUNCIONES
 
 
-def validate_name(nombre):
-    return re.fullmatch(r'[\s a-zA-Z]+', nombre)
-
-
-def validate_phone(telefono):
-    return re.fullmatch(r'\d{0,10}', telefono)
-
-
-def validate_address(direccion):
-    return len(direccion.strip()) > 0
-
-
-def add_order(nombre, telefono, direccion, total, pedido, fecha):
+def add_order(tree, var_nombre_cliente,
+              var_telefono_cliente,
+              var_direccion_cliente,
+              var_monto_cliente,
+              var_pedido_cliente,
+              var_fecha_cliente):
     data = (
-        nombre,
-        telefono,
-        direccion,
-        total,
-        pedido,
-        fecha
+        var_nombre_cliente,
+        var_telefono_cliente,
+        var_direccion_cliente,
+        var_monto_cliente,
+        var_pedido_cliente,
+        var_fecha_cliente
     )
-    print(nombre, telefono, direccion, total, pedido, fecha)
     if not validate_name(data[0]):
         messagebox.showerror("Error", "El nombre solo debe contener letras.")
         return
@@ -75,7 +66,7 @@ def add_order(nombre, telefono, direccion, total, pedido, fecha):
     tree.insert("", "end", values=(last_id, *data))
 
 
-def delete_order(selected_items):
+def delete_order(tree, selected_items):
     if selected_items:
         for selected_item in selected_items:
             item = tree.item(selected_item)
@@ -89,7 +80,8 @@ def delete_order(selected_items):
                 "Atención", "La orden fue eliminada con exito")
 
 
-def update_order(selected_items, var_nombre_cliente,
+def update_order(tree, selected_items,
+                 var_nombre_cliente,
                  var_telefono_cliente,
                  var_direccion_cliente,
                  var_monto_cliente,
@@ -123,9 +115,16 @@ def update_order(selected_items, var_nombre_cliente,
         )
 
 
-# LLENADO DE LA TABLA
-cursor = connection.cursor()
-cursor.execute("SELECT * FROM orders")
-rows = cursor.fetchall()
-for row in rows:
-    tree.insert("", "end", values=row)
+# VALIDACIONES
+
+
+def validate_name(nombre):
+    return re.fullmatch(r'[\s a-zA-Z]+', nombre)
+
+
+def validate_phone(telefono):
+    return re.fullmatch(r'\d{0,10}', telefono)
+
+
+def validate_address(direccion):
+    return len(direccion.strip()) > 0

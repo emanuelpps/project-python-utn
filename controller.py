@@ -1,8 +1,7 @@
-from tkinter import Tk
 import view
-
+from tkinter import Tk
 
 if __name__ == "__main__":
     root = Tk()
-    view.main_view(root)
+    view.MainView(root)
     root.mainloop()
